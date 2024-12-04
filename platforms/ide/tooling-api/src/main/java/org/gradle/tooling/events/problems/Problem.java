@@ -61,7 +61,15 @@ public interface Problem {
      * @return the locations
      * @since 8.12
      */
-    List<Location> getLocations();
+    List<Location> getOriginLocations();
+
+    /**
+     * Returns the contextual locations associated with this problem.
+     *
+     * @return the locations
+     * @since 8.12
+     */
+    List<Location> getContextualLocations();
 
     /**
      * Returns the list of solutions.
