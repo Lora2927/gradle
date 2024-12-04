@@ -23,7 +23,6 @@ import org.gradle.api.file.ProjectLayout;
 import org.gradle.api.internal.file.FileFactory;
 import org.gradle.api.internal.file.FileLookup;
 import org.gradle.api.internal.project.ProjectInternal;
-import org.gradle.api.internal.provider.Providers;
 import org.gradle.api.provider.Provider;
 import org.gradle.internal.instrumentation.api.annotations.BytecodeUpgrade;
 import org.gradle.internal.instrumentation.api.annotations.ReplacesEagerProperty;
@@ -58,12 +57,21 @@ public abstract class ReportingExtension {
 
     private final ProjectInternal project;
     private final ExtensiblePolymorphicDomainObjectContainer<ReportSpec> reports;
+    private final Provider<String> apiDocTitle;
 
     @Inject
     public ReportingExtension(Project project) {
         this.project = (ProjectInternal)project;
         this.reports = project.getObjects().polymorphicDomainObjectContainer(ReportSpec.class);
         getBaseDirectory().convention(project.getLayout().getBuildDirectory().dir(DEFAULT_REPORTS_DIR_NAME));
+        this.apiDocTitle = project.getProviders().provider(() -> {
+            Object version = project.getVersion();
+            if (Project.DEFAULT_VERSION.equals(version)) {
+                return project.getName() + " API";
+            } else {
+                return project.getName() + " " + version + " API";
+            }
+        });
     }
 
     /**
@@ -89,12 +97,7 @@ public abstract class ReportingExtension {
     // TODO this doesn't belong here, that java plugin should add an extension to this guy with this
     @ReplacesEagerProperty
     public Provider<String> getApiDocTitle() {
-        Object version = project.getVersion();
-        if (Project.DEFAULT_VERSION.equals(version)) {
-            return Providers.of(project.getName() + " API");
-        } else {
-            return Providers.of(project.getName() + " " + version + " API");
-        }
+        return apiDocTitle;
     }
 
     /**
