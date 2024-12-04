@@ -17,7 +17,6 @@
 package org.gradle.api.reporting;
 
 import org.gradle.api.file.DirectoryProperty;
-import org.gradle.api.provider.Property;
 import org.gradle.api.provider.Provider;
 import org.gradle.api.tasks.Internal;
 import org.gradle.api.tasks.OutputDirectory;
@@ -50,9 +49,7 @@ public interface DirectoryReport extends ConfigurableReport {
 
     /**
      * Always returns {@link Report.OutputType#DIRECTORY}
-     *
-     * @return {@link Report.OutputType#DIRECTORY}
      */
     @Override
-    Property<OutputType> getOutputType();
+    Provider<OutputType> getOutputType();
 }

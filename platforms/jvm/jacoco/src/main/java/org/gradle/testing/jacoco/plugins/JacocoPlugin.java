@@ -194,7 +194,7 @@ public abstract class JacocoPlugin implements Plugin<Project> {
 
     private void configureJacocoReportDefaults(final JacocoPluginExtension extension, final JacocoReport reportTask) {
         reportTask.getReports().all(action(report ->
-            report.getRequired().convention(report.getName().get().equals("html"))
+            report.getRequired().convention(report.getName().map(name -> name.equals("html")))
         ));
         DirectoryProperty reportsDir = extension.getReportsDirectory();
         reportTask.getReports().all(action(report -> {

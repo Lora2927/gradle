@@ -19,9 +19,9 @@ package org.gradle.api.reporting;
 import org.gradle.api.Namer;
 import org.gradle.api.file.FileSystemLocation;
 import org.gradle.api.provider.Property;
+import org.gradle.api.provider.Provider;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.Internal;
-import org.gradle.internal.instrumentation.api.annotations.ReplacedAccessor;
 import org.gradle.internal.instrumentation.api.annotations.ReplacesEagerProperty;
 import org.gradle.util.Configurable;
 
@@ -54,19 +54,15 @@ public interface Report extends Configurable<Report> {
      * @return The name of this report.
      */
     @Input
-    @ReplacesEagerProperty(replacedAccessors = {
-        @ReplacedAccessor(value = ReplacedAccessor.AccessorType.GETTER, name = "getName"),
-    })
-    Property<String> getName();
+    @ReplacesEagerProperty
+    Provider<String> getName();
 
     /**
      * A more descriptive name of this report. Used when the report is referenced for end users.
      */
     @Input
-    @ReplacesEagerProperty(replacedAccessors = {
-        @ReplacedAccessor(value = ReplacedAccessor.AccessorType.GETTER, name = "getDisplayName"),
-    })
-    Property<String> getDisplayName();
+    @ReplacesEagerProperty
+    Provider<String> getDisplayName();
 
     /**
      * A flag that determines whether this report should be generated or not.
@@ -108,9 +104,7 @@ public interface Report extends Configurable<Report> {
      * The type of output that the report generates.
      */
     @Input
-    @ReplacesEagerProperty(replacedAccessors = {
-        @ReplacedAccessor(value = ReplacedAccessor.AccessorType.GETTER, name = "getOutputType"),
-    })
-    Property<OutputType> getOutputType();
+    @ReplacesEagerProperty
+    Provider<OutputType> getOutputType();
 
 }
