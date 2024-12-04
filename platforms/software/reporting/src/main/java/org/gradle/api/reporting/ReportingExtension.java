@@ -23,6 +23,7 @@ import org.gradle.api.file.ProjectLayout;
 import org.gradle.api.internal.file.FileFactory;
 import org.gradle.api.internal.file.FileLookup;
 import org.gradle.api.internal.project.ProjectInternal;
+import org.gradle.api.internal.provider.ProviderApiDeprecationLogger;
 import org.gradle.api.provider.Provider;
 import org.gradle.internal.instrumentation.api.annotations.BytecodeUpgrade;
 import org.gradle.internal.instrumentation.api.annotations.ReplacesEagerProperty;
@@ -36,12 +37,9 @@ import java.io.File;
  * Example usage:
  * <pre>
  * reporting {
- *     baseDir "$buildDir/our-reports"
+ *     baseDirectory = layout.buildDirectory().dir("our-reports")
  * }
  * </pre>
- * <p>
- * When implementing a task that produces reports, the location of where to generate reports should be obtained
- * via the {@link #file(String)} method of this extension.
  */
 public abstract class ReportingExtension {
 
@@ -90,7 +88,9 @@ public abstract class ReportingExtension {
      * @param path the relative path
      * @return a file object at the given path relative to {@link #getBaseDirectory()}
      */
+    @Deprecated
     public File file(String path) {  // TODO should this take Object?
+        ProviderApiDeprecationLogger.logDeprecation(ReportingExtension.class, "file(path)", "baseDirectory.dir(path) or baseDirectory.file(path)");
         return this.project.getServices().get(FileLookup.class).getFileResolver(getBaseDirectory().getAsFile().get()).resolve(path);
     }
 
